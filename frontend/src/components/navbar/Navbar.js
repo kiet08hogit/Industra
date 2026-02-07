@@ -152,6 +152,8 @@ export default function Navbar() {
               <br />
               <br />
 
+              <h6 onClick={() => navigate('/orders')} style={{ cursor: "pointer" }}>Reorder</h6>
+              <br />
               <h6 onClick={() => navigate('/orders')} style={{ cursor: "pointer" }}>Track your order</h6>
               <br />
               <br />

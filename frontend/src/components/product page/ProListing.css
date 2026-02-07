@@ -188,6 +188,9 @@ p {
   transition: transform 0.2s ease;
   background: #fff;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .singleContainer:hover {
@@ -210,4 +213,113 @@ p {
   .product-grid {
     grid-template-columns: repeat(1, 1fr);
   }
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.buy-now-btn {
+  flex: 1;
+  background-color: #0058a3;
+  /* Theme Blue */
+  color: white;
+  border: none;
+  padding: 8px 5px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+
+.add-to-cart-btn {
+  flex: 1;
+  background-color: white;
+  color: #0058a3;
+  /* Theme Blue Text */
+  border: 1px solid #0058a3;
+  /* Theme Blue Border */
+  padding: 8px 5px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #f0f7ff;
+}
+
+.buy-now-btn:hover {
+  background-color: #004480;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.product-description {
+  color: rgb(93, 93, 93);
+  font-size: 13px;
+  min-height: 40px;
+  /* reserve space for 2 lines */
+  margin-bottom: 10px;
+
+  /* Line Clamping */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+.product-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: #111;
+  margin-bottom: 8px;
+
+  /* Fixed height approx 2 lines to align cards */
+  height: 40px;
+
+  /* Line Clamping */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.product-image-container {
+  margin-bottom: 20px;
+  height: 200px;
+  /* Fixed height for image area for alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image-container img {
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  /* Pushes buttons to bottom */
+  padding-top: 15px;
 }

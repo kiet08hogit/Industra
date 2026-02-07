@@ -23,6 +23,18 @@ function Orders() {
         }
     };
 
+    const handleReorder = async (orderId) => {
+        try {
+            await orderAPI.reorder(orderId);
+            // Trigger cart update event
+            window.dispatchEvent(new Event('cartUpdated'));
+            navigate('/cart');
+        } catch (error) {
+            console.error('Error reordering:', error);
+            alert('Failed to reorder items. Please try again.');
+        }
+    };
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
@@ -60,13 +72,13 @@ function Orders() {
                     <h1>My Orders</h1>
                 </div>
                 <div className="empty-orders">
-                    <img 
-                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTUwIDEwQzI3LjkwOSAxMCAxMCAyNy45MDkgMTAgNTBDMTAgNzIuMDkxIDI3LjkwOSA5MCA1MCA5MEM3Mi4wOTEgOTAgOTAgNzIuMDkxIDkwIDUwQzkwIDI3LjkwOSA3Mi4wOTEgMTAgNTAgMTBaTTUwIDgwQzMzLjQzMSA4MCAyMCA2Ni41NjkgMjAgNTBDMjAgMzMuNDMxIDMzLjQzMSAyMCA1MCAyMEM2Ni41NjkgMjAgODAgMzMuNDMxIDgwIDUwQzgwIDY2LjU2OSA2Ni41NjkgODAgNTAgODBaIiBmaWxsPSIjY2NjIi8+CiAgPHBhdGggZD0iTTM1IDQwSDY1VjQ1SDM1VjQwWk0zNSA1MEg2NVY1NUgzNVY1MFpNMzUgNjBINjVWNjVIMzVWNjBaIiBmaWxsPSIjY2NjIi8+Cjwvc3ZnPgo=" 
+                    <img
+                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHBhdGggZD0iTTUwIDEwQzI3LjkwOSAxMCAxMCAyNy45MDkgMTAgNTBDMTAgNzIuMDkxIDI3LjkwOSA5MCA1MCA5MEM3Mi4wOTEgOTAgOTAgNzIuMDkxIDkwIDUwQzkwIDI3LjkwOSA3Mi4wOTEgMTAgNTAgMTBaTTUwIDgwQzMzLjQzMSA4MCAyMCA2Ni41NjkgMjAgNTBDMjAgMzMuNDMxIDMzLjQzMSAyMCA1MCAyMEM2Ni41NjkgMjAgODAgMzMuNDMxIDgwIDUwQzgwIDY2LjU2OSA2Ni41NjkgODAgNTAgODBaIiBmaWxsPSIjY2NjIi8+CiAgPHBhdGggZD0iTTM1IDQwSDY1VjQ1SDM1VjQwWk0zNSA1MEg2NVY1NUgzNVY1MFpNMzUgNjBINjVWNjVIMzVWNjBaIiBmaWxsPSIjY2NjIi8+Cjwvc3ZnPgo="
                         alt="No Orders"
                     />
                     <h2>No Orders Yet</h2>
                     <p>You haven't placed any orders yet.</p>
-                    <button 
+                    <button
                         className="shop-now-btn"
                         onClick={() => navigate('/products')}
                     >
@@ -102,8 +114,8 @@ function Orders() {
                         <div className="order-items">
                             {order.items && order.items.slice(0, 3).map((item, index) => (
                                 <div key={index} className="order-item-preview">
-                                    <img 
-                                        src={item.image_url || '/images/placeholder.png'} 
+                                    <img
+                                        src={item.image_url || '/images/placeholder.png'}
                                         alt={item.name || 'Product'}
                                     />
                                     <div className="item-details">
@@ -123,11 +135,27 @@ function Orders() {
                                 <span>Total:</span>
                                 <strong>${parseFloat(order.total_amount).toFixed(2)}</strong>
                             </div>
-                            <button 
+                            <button
                                 className="view-details-btn"
                                 onClick={() => navigate(`/orders/${order.id}`)}
                             >
                                 View Details
+                            </button>
+                            <button
+                                className="reorder-btn"
+                                onClick={() => handleReorder(order.id)}
+                                style={{
+                                    backgroundColor: '#111',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '8px 16px',
+                                    borderRadius: '4px',
+                                    fontWeight: '500',
+                                    cursor: 'pointer',
+                                    marginLeft: '10px'
+                                }}
+                            >
+                                Reorder
                             </button>
                         </div>
                     </div>

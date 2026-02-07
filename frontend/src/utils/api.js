@@ -22,7 +22,6 @@ api.interceptors.request.use(
 export const userAPI = {
   createOrUpdateProfile: (data) => api.post('/users/profile', data),
   getProfile: () => api.get('/users/profile'),
-  getRecommendations: () => api.get('/users/recommendations'),
 };
 
 export const cartAPI = {
@@ -31,12 +30,14 @@ export const cartAPI = {
   updateQuantity: (productId, quantity) => api.put(`/cart/${productId}`, { quantity }),
   removeFromCart: (productId) => api.delete(`/cart/${productId}`),
   clearCart: () => api.delete('/cart'),
+  getRecommendations: () => api.get('/cart/recommendations'),
 };
 
 export const orderAPI = {
   createOrder: () => api.post('/orders'),
   getOrders: () => api.get('/orders'),
   getOrderById: (orderId) => api.get(`/orders/${orderId}`),
+  reorder: (orderId) => api.post(`/orders/${orderId}/reorder`),
 };
 
 export const productsAPI = {
@@ -44,7 +45,6 @@ export const productsAPI = {
   getProductsByCategory: (category) => api.get(`/products/category/${category}`),
   getProductById: (category, id) => api.get(`/products/category/${category}/${id}`),
   searchProducts: (query) => api.get(`/products/search?q=${query}`),
-  getRelatedProducts: (id) => api.get(`/products/recommendations/${id}`),
 };
 
 export default api;

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createOrderController, getOrdersController, getOrderByIdController } from '../controller/order.controller';
+import { createOrderController, getOrdersController, getOrderByIdController, reorderController } from '../controller/order.controller';
 import { requireAuth } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -12,5 +12,8 @@ router.get('/', ...(requireAuth as any), getOrdersController);
 
 // Get Single Order     
 router.get('/:id', ...(requireAuth as any), getOrderByIdController);
+
+// Reorder 
+router.post('/:id/reorder', ...(requireAuth as any), reorderController);
 
 export default router;

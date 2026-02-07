@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getCart, addToCart, updateCartItem, removeFromCart } from '../controller/cart.controller';
+import { getCart, addToCart, updateCartItem, removeFromCart, getCartRecommendationsController } from '../controller/cart.controller';
 import { requireAuth } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -15,5 +15,8 @@ router.put('/:id', ...(requireAuth as any), updateCartItem);
 
 // Remove item from cart
 router.delete('/:id', ...(requireAuth as any), removeFromCart);
+
+// Recommendations
+router.get('/recommendations', ...(requireAuth as any), getCartRecommendationsController);
 
 export default router;

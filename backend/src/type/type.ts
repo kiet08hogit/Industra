@@ -26,7 +26,7 @@ export interface Product {
 export interface User {
 	id: ID;
 	email: string;
-	password?: string; // hashed password, optional for security
+	password?: string; 
 }
 
 export interface CartItem {

@@ -30,21 +30,12 @@ app.use('/api/users', userRoutes);
 // Initialize DB
 
 
-// Initialize DB and Recommendation Engine
 initDB();
 initRecommender();
 
-// Mount Auth Routes
-// All routes in authRoutes will be prefixed with /auth
-// e.g. /auth/register
-// app.use("/auth", authRoutes);
-// Basic test route
 app.get('/', (req, res) => {
     res.json({ message: "Welcome to ShoppingPal" });
 });
-
-// PROTECTED ROUTE EXAMPLE
-// app.get('/me', requireAuth, (req: any, res: any) => { ... });
 
 const PORT = process.env.PORT || 5000;
 

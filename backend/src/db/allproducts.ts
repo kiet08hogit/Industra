@@ -33,20 +33,24 @@ export const getProductById = async (category: string, id: string) => {
     return result.rows[0];
 }
 
+const primaryCategories = [
+    { name: 'hard_hat', table: 'industrial_hard_hat' },
+    { name: 'safety_gloves', table: 'industrial_safety_gloves' },
+    { name: 'power_tools', table: 'industrial_power_tools' },
+    { name: 'safety_glasses', table: 'industrial_safety_glasses' }
+];
+
 export const getAllProducts = async () => {
-    const tables = [...new Set(Object.values(allowedTables))]; // Deduplicate
-    const queries = tables.map(table => `SELECT * FROM ${table}`);
+    const queries = primaryCategories.map(cat =>
+        `SELECT *, '${cat.name}' as category FROM ${cat.table}`
+    );
     const finalQuery = queries.join(' UNION ALL ');
     const result = await pool.query(finalQuery);
     return result.rows;
 }
 
 export const searchProducts = async (searchQuery: string) => {
-    const tables = [...new Set(Object.values(allowedTables))]; // Deduplicate
-    // Construct a UNION ALL query to search across all tables
-    // We select specific common columns or all columns if schemas are identical
-    // Based on importData.ts, schemas for industrial_* tables are identical.
-
+    const tables = [...new Set(Object.values(allowedTables))];
     const queries = tables.map(table => `SELECT * FROM ${table} WHERE name ILIKE $1`);
     const finalQuery = queries.join(' UNION ALL ');
 
