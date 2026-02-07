@@ -12,7 +12,8 @@ declare global {
     }
 }
 
-export const requireAuth = [
+// Force cast to avoid strict type mismatch with Express RequestHandler
+export const requireAuth: any[] = [
     // 1. Clerk Middleware: Verifies the token and attaches req.auth
     ClerkExpressWithAuth(),
 
@@ -20,7 +21,8 @@ export const requireAuth = [
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             if (!req.auth || !req.auth.userId) {
-                return res.status(401).json({ error: "Unauthenticated" });
+                res.status(401).json({ error: "Unauthenticated" });
+                return;
             }
 
             const clerkId = req.auth.userId;
