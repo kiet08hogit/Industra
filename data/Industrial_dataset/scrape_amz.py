@@ -7,8 +7,8 @@ import os
 import re
 import urllib.parse
 
-# Amazon search URL for safety glasses
-url = "https://www.amazon.com/s?k=safety+glasses"
+# Amazon search URL for power tools
+url = "https://www.amazon.com/s?k=power+tools"
 
 # Headers to mimic a real browser
 headers = {
@@ -98,6 +98,67 @@ try:
             avail_elem = product.find('span', string=lambda x: x and ('in stock' in str(x).lower() or 'only' in str(x).lower()))
             if avail_elem:
                 availability = avail_elem.get_text(strip=True)
+            
+            # Get detailed product description from detail page
+            description = "N/A"
+            if product_url != "N/A":
+                try:
+                    print(f"   Fetching details for: {name[:50]}...")
+                    prod_response = requests.get(product_url, headers=headers, timeout=10)
+                    prod_response.raise_for_status()
+                    prod_soup = BeautifulSoup(prod_response.content, 'html.parser')
+                    
+                    # Multiple strategies to find "About this item" section
+                    features = []
+                    
+                    # Strategy 1: Look for feature-bullets div
+                    feature_section = prod_soup.find('div', {'id': 'feature-bullets'})
+                    if feature_section:
+                        lis = feature_section.find_all('li', limit=5)
+                        for li in lis:
+                            text = li.get_text(strip=True)
+                            if text:
+                                features.append(text)
+                    
+                    # Strategy 2: Look for any ul with bullets class
+                    if not features:
+                        ul_elem = prod_soup.find('ul', {'class': lambda x: x and 'a-unordered-list' in str(x)})
+                        if ul_elem:
+                            lis = ul_elem.find_all('li', limit=5)
+                            for li in lis:
+                                text = li.get_text(strip=True)
+                                if text and len(text) > 10:
+                                    features.append(text)
+                    
+                    # Strategy 3: Look for divs with data-feature-name
+                    if not features:
+                        feature_divs = prod_soup.find_all('div', {'data-feature-name': True}, limit=5)
+                        for div in feature_divs:
+                            text = div.get_text(strip=True)
+                            if text and len(text) > 10:
+                                features.append(text)
+                    
+                    # Strategy 4: Look in the a-expander-content
+                    if not features:
+                        expanders = prod_soup.find_all('div', {'class': lambda x: x and 'a-expander-content' in str(x)}, limit=1)
+                        for exp in expanders:
+                            lis = exp.find_all('li', limit=5)
+                            for li in lis:
+                                text = li.get_text(strip=True)
+                                if text:
+                                    features.append(text)
+                    
+                    if features:
+                        description = " | ".join(features)
+                    
+                    if description != "N/A" and len(description) > 800:
+                        description = description[:800]  # Limit to 800 chars
+                    
+                    time.sleep(0.5)  # Be respectful with requests
+                except Exception as e:
+                    print(f"   Error fetching product details: {str(e)[:50]}")
+                    description = "N/A"
+
 
             # Image URL and download
             image_path = ""
@@ -150,28 +211,27 @@ try:
                     'Number of Reviews': reviews,
                     'Prime': prime,
                     'Availability': availability,
-                    'URL': product_url,
-                    'Image': image_path
+                    'Description': description
                 })
                 
-                print(f"{len(products_data):2d}. ✓ {name[:60]}...")
+                print(f"{len(products_data):2d}. [OK] {name[:60]}...")
         
         except Exception as e:
             print(f"Error scraping product {idx}: {str(e)[:50]}")
             continue
     
     # Save to CSV
-    csv_filename = "Safety glasses.csv"
+    csv_filename = "Power tools.csv"
     if products_data:
         with open(csv_filename, 'w', newline='', encoding='utf-8') as csvfile:
-            fieldnames = ['Product Name', 'Price', 'Rating', 'Number of Reviews', 'Prime', 'Availability', 'URL', 'Image']
+            fieldnames = ['Product Name', 'Price', 'Rating', 'Number of Reviews', 'Prime', 'Availability', 'Description']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             
             writer.writeheader()
             writer.writerows(products_data)
         
-        print(f"\n✓ Successfully scraped {len(products_data)} products!")
-        print(f"✓ Data saved to '{csv_filename}'")
+        print(f"\n[OK] Successfully scraped {len(products_data)} products!")
+        print(f"[OK] Data saved to '{csv_filename}'")
     else:
         print("No valid products found!")
 
