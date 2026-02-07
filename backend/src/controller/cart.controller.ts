@@ -12,15 +12,22 @@ const getUserId = (req: Request): number => {
 
 export const getCart = async (req: Request, res: Response) => {
     try {
+        console.log('🛒 getCart called');
+        console.log('Auth object:', req.auth);
+        console.log('User object:', req.user);
+
         const userId = getUserId(req);
+        console.log('User ID:', userId);
+
         let cart = await cartDb.getCart(userId);
         if (!cart) {
             cart = await cartDb.createCart(userId);
         }
         res.json(cart);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error fetching cart" });
+    } catch (error: any) {
+        console.error('❌ Cart error:', error.message);
+        console.error('Full error:', error);
+        res.status(500).json({ message: error.message || "Error fetching cart" });
     }
 };
 
