@@ -18,22 +18,22 @@ export default function Navbar() {
   const [isSearching, setIsSearching] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
-  const updateCartCount = async () => {
-    if (!isSignedIn) {
-      setCartCount(0);
-      return;
-    }
-    try {
-      const response = await cartAPI.getCart();
-      const items = response.data.items || [];
-      const count = items.reduce((acc, item) => acc + item.quantity, 0);
-      setCartCount(count);
-    } catch (error) {
-      console.error("Error fetching cart count:", error);
-    }
-  };
-
   useEffect(() => {
+    const updateCartCount = async () => {
+      if (!isSignedIn) {
+        setCartCount(0);
+        return;
+      }
+      try {
+        const response = await cartAPI.getCart();
+        const items = response.data.items || [];
+        const count = items.reduce((acc, item) => acc + item.quantity, 0);
+        setCartCount(count);
+      } catch (error) {
+        console.error("Error fetching cart count:", error);
+      }
+    };
+
     updateCartCount();
 
     const handleCartUpdate = () => {

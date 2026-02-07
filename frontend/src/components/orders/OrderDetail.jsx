@@ -10,19 +10,18 @@ function OrderDetail() {
     const { id } = useParams();
 
     useEffect(() => {
+        const loadOrderDetail = async () => {
+            try {
+                const response = await orderAPI.getOrderById(id);
+                setOrder(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error loading order:', error);
+                setLoading(false);
+            }
+        };
         loadOrderDetail();
     }, [id]);
-
-    const loadOrderDetail = async () => {
-        try {
-            const response = await orderAPI.getOrderById(id);
-            setOrder(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error loading order:', error);
-            setLoading(false);
-        }
-    };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -90,8 +89,8 @@ function OrderDetail() {
                     <div className="items-list">
                         {order.items && order.items.map((item, index) => (
                             <div key={index} className="order-item-detail">
-                                <img 
-                                    src={item.image_url || '/images/placeholder.png'} 
+                                <img
+                                    src={item.image_url || '/images/placeholder.png'}
                                     alt={item.name || 'Product'}
                                 />
                                 <div className="item-info">
@@ -131,14 +130,14 @@ function OrderDetail() {
                     </div>
 
                     <div className="order-actions">
-                        <button 
+                        <button
                             className="action-btn primary"
                             onClick={() => navigate('/products')}
                         >
                             <span className="material-symbols-outlined">shopping_cart</span>
                             Shop Again
                         </button>
-                        <button 
+                        <button
                             className="action-btn secondary"
                             onClick={() => window.print()}
                         >
