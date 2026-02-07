@@ -1,6 +1,7 @@
 [build]
+  base = "frontend"
   command = "npm run build"
-  publish = "build"
+  publish = "frontend/build"
 
 [[redirects]]
   from = "/*"
@@ -9,5 +10,4 @@
 
 [build.environment]
   NODE_VERSION = "18"
-  REACT_APP_CLERK_PUBLISHABLE_KEY = "pk_test_cmVzdGVkLWJsdWVnaWxsLTUuY2xlcmsuYWNjb3VudHMuZGV2JA"
-  REACT_APP_API_URL = "https://industra-k5i2.onrender.com/api"
+
