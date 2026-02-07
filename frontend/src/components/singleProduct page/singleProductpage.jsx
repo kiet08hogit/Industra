@@ -1,7 +1,5 @@
 import "./singleProductpage.css"
 import { FaStar } from 'react-icons/fa';
-import { FaStarHalf } from 'react-icons/fa';
-import { BiStoreAlt } from 'react-icons/bi';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import { useEffect, useState } from "react";
 import Loading from "./loading";
@@ -49,14 +47,6 @@ function SingleProduct() {
                 setLoading(false);
             })
     }, [id, category])
-
-    const [availability, setAvailbility] = useState('')
-
-    function checkDelivery() {
-        setAvailbility("Yes Delivery Available at your Location")
-    }
-
-    console.log(availability);
     async function addToCart() {
         if (!isauth) return;
 

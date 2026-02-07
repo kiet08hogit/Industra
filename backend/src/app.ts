@@ -4,7 +4,6 @@ import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 import { initDB } from './db/dbinit';
-import { requireAuth } from './middleware/auth.middleware';
 import cartRoutes from './routes/cart.route';
 import orderRoutes from './routes/order.route';
 import allProductsRoutes from './routes/allproductsroute';
@@ -14,7 +13,10 @@ import userRoutes from './routes/user.route';
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true
+}));
 app.use(express.json());
 
 // Routes with /api prefix

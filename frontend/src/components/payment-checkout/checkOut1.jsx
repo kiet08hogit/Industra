@@ -16,7 +16,7 @@ function Checkout1() {
         } else {
             navigate('/login');
         }
-    }, [isSignedIn])
+    }, [isSignedIn, navigate])
 
     async function loadCart() {
         try {
@@ -29,7 +29,7 @@ function Checkout1() {
             setLoading(false);
         }
     }
-    
+
     let subtotal = 0;
     cartItems.forEach(item => {
         subtotal += (parseFloat(item.price) || 0) * item.quantity;
@@ -51,11 +51,11 @@ function Checkout1() {
                 <h1>Checkout</h1>
                 <div className="checkout-steps">
                     <div className="step active">1. Shipping</div>
-                    <div className="step" style={{opacity: 0.5, cursor: 'not-allowed'}}>2. Payment</div>
-                    <div className="step" style={{opacity: 0.5, cursor: 'not-allowed'}}>3. Confirmation</div>
+                    <div className="step" style={{ opacity: 0.5, cursor: 'not-allowed' }}>2. Payment</div>
+                    <div className="step" style={{ opacity: 0.5, cursor: 'not-allowed' }}>3. Confirmation</div>
                 </div>
             </div>
-            
+
             <div className="checkout-content">
                 <div className="shipping-section">
                     <div className="section-card">
@@ -63,11 +63,11 @@ function Checkout1() {
                         <form>
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>First<br/>Name</label>
+                                    <label>First<br />Name</label>
                                     <input type="text" className="form-input" />
                                 </div>
                                 <div className="form-group">
-                                    <label>Last<br/>Name</label>
+                                    <label>Last<br />Name</label>
                                     <input type="text" className="form-input" />
                                 </div>
                             </div>
@@ -94,11 +94,11 @@ function Checkout1() {
                                 </div>
                                 <div className="form-group">
                                     <label>State</label>
-                                    <input 
-                                        type="text" 
-                                        className="form-input" 
-                                        value="Illinois (IL)" 
-                                        disabled 
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value="Illinois (IL)"
+                                        disabled
                                         style={{ backgroundColor: '#f0f0f0', cursor: 'not-allowed' }}
                                     />
                                 </div>
@@ -113,9 +113,9 @@ function Checkout1() {
                                 <input type="tel" className="form-input" />
                             </div>
 
-                            <button 
+                            <button
                                 type="button"
-                                className="continue-btn" 
+                                className="continue-btn"
                                 onClick={() => navigate("/checkout2")}
                             >
                                 Continue to Payment
@@ -128,12 +128,12 @@ function Checkout1() {
                     <div className="summary-card">
                         <h2>Order Summary</h2>
                         <div className="summary-count">Total Items: {cartItems.length}</div>
-                        
+
                         <div className="cart-items-list">
                             {cartItems.map((item) => (
                                 <div key={item.id} className="checkout-cart-item">
-                                    <img 
-                                        src={item.image_url} 
+                                    <img
+                                        src={item.image_url}
                                         alt={item.name}
                                         className="item-image"
                                     />
@@ -170,7 +170,7 @@ function Checkout1() {
                 </div>
             </div>
         </div>
-     )
+    )
 }
 
-            export default Checkout1;
+export default Checkout1;
