@@ -1,8 +1,6 @@
 import { Request, Response } from 'express';
 import * as cartDb from '../db/cart';
 
-// Helper to get userId from request (assuming auth middleware populates it)
-// For now, we might need to mock it or expect it in body if auth not fully set up
 const getUserId = (req: Request): number => {
     // @ts-ignore
     if (!req.user || !req.user.id) {
@@ -33,7 +31,7 @@ export const addToCart = async (req: Request, res: Response) => {
 
         if (!productId || !category) {
             res.status(400).json({ message: "Product ID and Category are required" });
-            return; // Explicitly return
+            return;
         }
 
         await cartDb.addToCart(userId, productId, category, quantity || 1);
@@ -71,5 +69,38 @@ export const removeFromCart = async (req: Request, res: Response) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error removing from cart" });
+    }
+};
+
+import { getRelatedProducts, searchWithRelevance } from '../utils/recommender';
+
+export const getCartRecommendationsController = async (req: Request, res: Response) => {
+    try {
+        const userId = getUserId(req);
+        const cart = await cartDb.getCart(userId);
+
+        let recommendations = [];
+
+        if (!cart || cart.items.length === 0) {
+            // Default recommendations if cart is empty
+            recommendations = await searchWithRelevance("safety tools");
+        } else {
+            // Get recommendations based on the last item added
+            const lastItem = cart.items[cart.items.length - 1];
+            recommendations = await getRelatedProducts(lastItem.product_id);
+
+            // If few recommendations, mix with generic ones
+            if (recommendations.length < 3) {
+                const generic = await searchWithRelevance("safety");
+                recommendations = [...recommendations, ...generic];
+            }
+        }
+
+        // Return top 5 unique recommendations
+        const unique = recommendations.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i).slice(0, 5);
+        res.json(unique);
+    } catch (error) {
+        console.error("Error fetching cart recommendations:", error);
+        res.status(500).json({ message: "Error fetching recommendations" });
     }
 };

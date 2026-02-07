@@ -44,14 +44,14 @@ export default function Checkout() {
 
   function applyCoupon() {
     const code = couponCode.toUpperCase().trim();
-    
+
     const coupons = {
       'SAFETEAM15': { type: 'discount', value: 0.15, message: 'Coupon applied! You got 15% off on Bulk Safety Gear' },
       'POWER20': { type: 'discount', value: 0.20, message: 'Coupon applied! You got 20% off on Power Tools' },
       'FREESHIP': { type: 'discount', value: 7, message: 'Coupon applied! You got $7 shipping discount' },
       'CLEAN25': { type: 'discount', value: 0.25, message: 'Coupon applied! You got 25% off on Maintenance Supplies' }
     };
-    
+
     if (coupons[code]) {
       const coupon = coupons[code];
       if (coupon.type === 'discount') {
@@ -108,7 +108,7 @@ export default function Checkout() {
   });
 
   const shippingCost = 7.00;
-  const discountAmount = couponApplied 
+  const discountAmount = couponApplied
     ? (couponCode && couponCode.toUpperCase() === 'FREESHIP' ? discount : subtotal * discount)
     : 0;
   const subtotalAfterDiscount = subtotal - discountAmount;
@@ -144,16 +144,16 @@ export default function Checkout() {
         <div className="checkout-steps">
           <div className="step clickable" onClick={() => navigate('/checkout')}>1. Shipping</div>
           <div className="step active">2. Payment</div>
-          <div className="step" style={{opacity: 0.5, cursor: 'not-allowed'}}>3. Confirmation</div>
+          <div className="step" style={{ opacity: 0.5, cursor: 'not-allowed' }}>3. Confirmation</div>
         </div>
       </div>
-      
+
       <div className="checkout-content">
         <div className="payment-section">
           <div className="section-card">
             <h2>Choose payment method</h2>
             <p>Choose the payment method you prefer</p>
-            
+
             <div className="payment-options">
               <label className="payment-option" onClick={() => handlePaymentSelect(1)}>
                 <input type="radio" name="payment" checked={selectedPayment === 1} readOnly />
@@ -171,33 +171,33 @@ export default function Checkout() {
               <label className="payment-option disabled">
                 <input type="radio" name="payment" disabled />
                 <div className="payment-option-content">
-                  <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span className="payment-label">PayPal</span>
                     <span className="maintenance-badge">Under Maintenance</span>
                   </div>
-                  <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-medium.png" alt="PayPal" className="paypal-logo" style={{opacity: 0.5}} />
+                  <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-medium.png" alt="PayPal" className="paypal-logo" style={{ opacity: 0.5 }} />
                 </div>
               </label>
 
               <label className="payment-option disabled">
                 <input type="radio" name="payment" disabled />
                 <div className="payment-option-content">
-                  <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span className="payment-label">Cryptocurrency</span>
                     <span className="maintenance-badge">Under Maintenance</span>
                   </div>
-                  <img src="https://bitpay.com/cdn/merchant-resources/bitpay-accepted-card-group.svg" alt="BitPay" className="crypto-logo" style={{opacity: 0.5}} />
+                  <img src="https://bitpay.com/cdn/merchant-resources/bitpay-accepted-card-group.svg" alt="BitPay" className="crypto-logo" style={{ opacity: 0.5 }} />
                 </div>
               </label>
 
               <label className="payment-option disabled">
                 <input type="radio" name="payment" disabled />
                 <div className="payment-option-content">
-                  <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span className="payment-label">Pay in 4 installments</span>
                     <span className="maintenance-badge">Under Maintenance</span>
                   </div>
-                  <img src="https://img.shop.com/Image/local/images/cc/SezzlePaymentBtn_Small-purple.svg" alt="Sezzle" className="sezzle-logo" style={{opacity: 0.5}} />
+                  <img src="https://img.shop.com/Image/local/images/cc/SezzlePaymentBtn_Small-purple.svg" alt="Sezzle" className="sezzle-logo" style={{ opacity: 0.5 }} />
                 </div>
               </label>
             </div>
@@ -218,7 +218,7 @@ export default function Checkout() {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-group full-width">
                     <label>Cardholder Name *</label>
                     <input
@@ -231,7 +231,7 @@ export default function Checkout() {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-group">
                     <label>Expiry Date *</label>
                     <input
@@ -244,7 +244,7 @@ export default function Checkout() {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-group">
                     <label>CVV *</label>
                     <input
@@ -258,10 +258,10 @@ export default function Checkout() {
                     />
                   </div>
                 </div>
-                
-                <button 
+
+                <button
                   type="button"
-                  className="pay-btn" 
+                  className="pay-btn"
                   onClick={handlePayment}
                 >
                   Place Order
@@ -270,9 +270,9 @@ export default function Checkout() {
             )}
 
             {!showCardForm && selectedPayment !== null && (
-              <button 
+              <button
                 type="button"
-                className="place-order-btn" 
+                className="place-order-btn"
                 onClick={() => navigate("/thankyou", {
                   state: {
                     cartItems,
@@ -294,16 +294,16 @@ export default function Checkout() {
             <div className="coupon-section">
               <h3>Have a coupon code?</h3>
               <div className="coupon-input-group">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="coupon-input"
                   placeholder="Enter coupon code (SAFETEAM15, POWER20, FREESHIP, CLEAN25)"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
                   disabled={couponApplied}
                 />
-                <button 
-                  className="coupon-apply-btn" 
+                <button
+                  className="coupon-apply-btn"
                   onClick={applyCoupon}
                   disabled={couponApplied}
                 >
@@ -321,12 +321,12 @@ export default function Checkout() {
           <div className="summary-card">
             <h2>Order Summary</h2>
             <div className="summary-count">Total Items: {cartItems.length}</div>
-            
+
             <div className="cart-items-list">
               {cartItems.map((item) => (
                 <div key={item.id} className="checkout-cart-item">
-                  <img 
-                    src={item.image_url} 
+                  <img
+                    src={item.image_url}
                     alt={item.name}
                     className="item-image"
                   />

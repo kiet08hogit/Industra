@@ -8,11 +8,13 @@ function Checkout1() {
     let navigate = useNavigate()
     const { isSignedIn } = useUser();
     const [cartItems, setCartItems] = useState([])
+    const [recommendations, setRecommendations] = useState([])
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         if (isSignedIn) {
             loadCart();
+            loadRecommendations();
         } else {
             navigate('/login');
         }
@@ -27,6 +29,27 @@ function Checkout1() {
             setCartItems([]);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function loadRecommendations() {
+        try {
+            const response = await cartAPI.getRecommendations();
+            setRecommendations(response.data || []);
+        } catch (error) {
+            console.error('Error loading recommendations:', error);
+        }
+    }
+
+    async function addRecToCart(product) {
+        try {
+            await cartAPI.addToCart(product.id, product.category, 1);
+            // Refresh cart and recommendations
+            loadCart();
+            loadRecommendations();
+            window.dispatchEvent(new Event('cartUpdated'));
+        } catch (error) {
+            console.error('Error adding recommendation:', error);
         }
     }
 
@@ -167,6 +190,30 @@ function Checkout1() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Recommendations Section */}
+                    {recommendations.length > 0 && (
+                        <div className="recommendations-section">
+                            <h3>Need anything else?</h3>
+                            <div className="recommendations-list">
+                                {recommendations.map((item) => (
+                                    <div key={item.id} className="recommendation-item">
+                                        <img src={item.image_url} alt={item.name} />
+                                        <div className="rec-details">
+                                            <p className="rec-name">{item.name}</p>
+                                            <p className="rec-price">${item.price}</p>
+                                            <button
+                                                className="add-rec-btn"
+                                                onClick={() => addRecToCart(item)}
+                                            >
+                                                Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

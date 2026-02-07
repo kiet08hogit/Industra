@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getProductById, getProductsByCategory, searchProducts, getAllProducts } from '../db/allproducts';
-import { searchWithRelevance, getRelatedProducts, trackInteraction } from '../utils/recommender';
+import { searchWithRelevance, getRelatedProducts } from '../utils/recommender';
+
 
 export const getProductsByCategorycontroller = async (req: Request<{ category: string }>, res: Response) => {
     const { category } = req.params;
@@ -25,14 +26,6 @@ export const getProductByIdcontroller = async (req: Request<{ category: string, 
         if (!product) {
             return res.status(404).json({ error: "Product not found" });
         }
-
-        // Track View (fire and forget)
-        // @ts-ignore
-        const userId = req.user?.id; // Will be undefined if not logged in, which is handled
-        if (userId) {
-            trackInteraction(userId, id, category, 'view');
-        }
-
         return res.status(200).json(product);
     } catch (error: any) {
         console.error("Error fetching product:", error);

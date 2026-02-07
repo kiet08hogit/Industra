@@ -2,28 +2,16 @@ import { Request, Response } from 'express';
 import * as orderDb from '../db/orders';
 
 const getUserId = (req: Request): number => {
-    // @ts-ignore
     if (!req.user || !req.user.id) {
         throw new Error("User not authenticated");
     }
-    // @ts-ignore
     return req.user.id;
 };
-
-import { trackInteraction } from '../utils/recommender';
 
 export const createOrderController = async (req: Request, res: Response) => {
     try {
         const userId = getUserId(req);
         const order = await orderDb.createOrder(userId);
-
-        // Track purchases for each item
-        if (order.items) {
-            order.items.forEach((item: any) => {
-                trackInteraction(userId, item.product_id, item.category, 'purchase');
-            });
-        }
-
         res.status(201).json(order);
     } catch (error: any) {
         console.error(error);
@@ -61,3 +49,19 @@ export const getOrderByIdController = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Error fetching order" });
     }
 }
+
+export const reorderController = async (req: Request, res: Response) => {
+    try {
+        const userId = getUserId(req);
+        const { id } = req.params;
+        const cart = await orderDb.reorder(userId, parseInt(id as string));
+        res.json(cart);
+    } catch (error: any) {
+        console.error(error);
+        if (error.message === "Order not found or empty") {
+            res.status(404).json({ message: "Order not found" });
+        } else {
+            res.status(500).json({ message: "Error reordering items" });
+        }
+    }
+};
