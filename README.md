@@ -1,4 +1,6 @@
 # Industra - Industrial Safety Equipment E-Commerce Platform
+Live Demo:
+https://industra-production.netlify.app/products (the backend logic is having error)
 
 A full-stack e-commerce web application specializing in industrial safety equipment including hard hats, power tools, safety glasses, and safety gloves. Built with modern web technologies and featuring intelligent product recommendations powered by TF-IDF algorithms.
 
